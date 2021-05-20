@@ -16,9 +16,7 @@ const mongo_Url = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_P
 // const mongo_Url = `mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false`;
 mongoose.connect(mongo_Url)
 .then( result => {
-    app.listen(3000, () => {
-        console.log('Welcome The app is running  on port 3000');
-    })
+     app.listen(process.env.PORT || 3000);
 })
 .catch(err => { console.log(err);
 });
