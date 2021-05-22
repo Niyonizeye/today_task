@@ -25,6 +25,7 @@ const mongo_Url = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_P
 mongoose.connect(mongo_Url)
 .then( result => {
      app.listen(process.env.PORT || 3000);
+     console.log('running well');
 })
 .catch(err => { console.log(err);
 });

@@ -1,5 +1,7 @@
 const Todo = require('../model/Todo');
 
+// const io = require('../socket.io')
+
 exports.GetTodos = async (req, res, next) => {
     try{
         const tasks = await Todo.find();
@@ -12,14 +14,6 @@ exports.GetTodos = async (req, res, next) => {
         console.log(err);
     }
 };
-
-// single todo
-exports.GetSingleTodo = (req, res, next) => {
-    res.status(200).json({
-        message: 'Single todod fetched Successful.'
-    });
-};
-
 // create todo
 exports.CreateTodo = async (req, res, next) => {
     const title = req.body.title;
@@ -40,28 +34,24 @@ exports.CreateTodo = async (req, res, next) => {
 }
 
 // to update todo
-exports.EditStatusTodo = async (req, res, next) => {
-    const taskId = req.params.taskId;
-    const status = req.body.status;
-    console.log(taskId);
-    try {
-        const task = await Todo.findById(taskId);
-        if(!task) console.log('No task found');
-        task.Status = status;
-        const result = await task.save();
-        res.status(200).json({
-        message: 'Todo is edited Successfull.',
-        task: result
-       })
-    }catch(err){
-        console.log(err)
-    }
-    ;
-}
-
-// to delete todo
-exports.DeleteTodo = (req, res, next) => {
-    res.status(200).json({
-        message: 'Todo is Deleted Successfull'
-    });
+exports.UpdateTodo = async (req, res, next) => {
+    const taskId = req.params.task_id;
+    const Status = req.body.Status;
+    // check if task exist
+        try {
+            const task = await Todo.findById(taskId);
+            if(!task) {
+                res.status(400).json({
+                    message: 'Try again Task is not failed'
+                })
+            }
+            task.Status = Status;
+            const result = await task.save();
+            res.status(200).json({
+            message: 'Todo is Successfull Edited.',
+            task: result
+        })
+        }catch(err){
+            console.log(err)
+        }
 }

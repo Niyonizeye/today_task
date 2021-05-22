@@ -6,11 +6,9 @@ exports.Createsubtask = async (req, res,next) => {
     const task_id = req.body.task_id;
     const subtask = new Subtask({
         title: title,
-        task_id: task_id
-
+        task_id: task_id  
     });
     try{
-
         const todo = await Todo.findById(task_id);
         console.log(todo);
          if(!todo) {
@@ -23,8 +21,9 @@ exports.Createsubtask = async (req, res,next) => {
         // todo.populate('subtask');
         // git initconsole.log(subtask_result);
     
-        todo.subtasks.push(subtask);
-        todo.save();
+        const subtask_result = await subtask.save(subtask);
+        todo.subtasks.push(subtask_result);
+        // todo.save();
         // todo.populate('subtask');
         // const savedTodo = await todo.save();
         res.status(200).json({
@@ -43,7 +42,11 @@ exports.editSubtask = async (req, res, next) => {
     console.log(SubtaskId);
     try {
         const Subtask = await Subtask.findById(SubtaskId);
-        if(!Subtask) console.log('No Subtask found');
+        if(!Subtask) {
+            res.status(400).json({
+                message: 'Sorry Try again'
+            })
+        }
         Subtask.Status = status;
         const result = await Subtask.save();
         res.status(200).json({
